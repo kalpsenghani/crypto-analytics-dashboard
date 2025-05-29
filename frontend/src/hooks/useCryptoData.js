@@ -3,7 +3,7 @@ import { fetcher } from '../utils/fetcher';
 
 export const useCryptoMarkets = (vsCurrency = 'usd', perPage = 250) => {
   const { data, error, mutate } = useSWR(
-    `/crypto/markets`,
+    `/crypto/markets?vs_currency=${vsCurrency}&per_page=${perPage}`,
     fetcher,
     {
       refreshInterval: 10000, // Refresh every 10 seconds for real-time feel

@@ -48,21 +48,23 @@ async def fetch_coingecko_data(endpoint: str) -> Dict[str, Any]:
 
 @api_router.get("/crypto/markets")
 async def get_crypto_markets(
+    vs_currency: str = 'usd',
+    per_page: int = 100,
     coin_id: Optional[str] = None,
     coin_ids: Optional[str] = None,
     days: Optional[int] = 7
 ):
     # Check cache first
-    cache_key = f"markets_{coin_id}_{coin_ids}_{days}"
+    cache_key = f"markets_{vs_currency}_{per_page}_{coin_id}_{coin_ids}_{days}"
     if cache_key in crypto_cache and (datetime.now() - crypto_cache[cache_key]['timestamp']).seconds < CACHE_DURATION:
         return crypto_cache[cache_key]['data']
     
     # Build the endpoint URL
-    endpoint = "/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&sparkline=true"
+    endpoint = f"/coins/markets?vs_currency={vs_currency}&order=market_cap_desc&per_page={per_page}&sparkline=true"
     if coin_id:
         endpoint = f"/coins/{coin_id}?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=true"
     elif coin_ids:
-        endpoint = f"/coins/markets?vs_currency=usd&ids={coin_ids}&order=market_cap_desc&per_page=100&sparkline=true"
+        endpoint = f"/coins/markets?vs_currency={vs_currency}&ids={coin_ids}&order=market_cap_desc&per_page={per_page}&sparkline=true"
     
     data = await fetch_coingecko_data(endpoint)
     
@@ -155,10 +157,13 @@ async def get_status_checks():
 # Include the router in the main app
 app.include_router(api_router)
 
+# Get CORS origins from environment variable or use default
+CORS_ORIGINS = os.getenv('CORS_ORIGINS', 'https://crypto-analytics-frontend.onrender.com').split(',')
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=["*"],
+    allow_origins=CORS_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
 )
