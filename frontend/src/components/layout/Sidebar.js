@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { 
   BarChart3, 
   TrendingUp, 
@@ -73,8 +74,8 @@ export const Sidebar = () => {
           <ul className="space-y-2">
             {navigation.map((item) => (
               <li key={item.name}>
-                <a
-                  href={item.href}
+                <Link
+                  to={item.href}
                   className={cn(
                     "flex items-center px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200",
                     "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white",
@@ -96,7 +97,7 @@ export const Sidebar = () => {
                       </motion.span>
                     )}
                   </AnimatePresence>
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

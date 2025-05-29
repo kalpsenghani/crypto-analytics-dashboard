@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import { SWRConfig } from 'swr';
 import { Sidebar } from './components/layout/Sidebar';
 import { CryptoDashboard } from './components/dashboard/CryptoDashboard';
@@ -130,7 +130,7 @@ function App() {
       <ThemeProvider>
         <SWRConfig value={swrConfig}>
           <div className="App min-h-screen">
-            <BrowserRouter>
+            <HashRouter>
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/markets" element={<Markets />} />
@@ -139,7 +139,7 @@ function App() {
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="/crypto/:symbol" element={<CryptoDetailPage />} />
               </Routes>
-            </BrowserRouter>
+            </HashRouter>
           </div>
         </SWRConfig>
       </ThemeProvider>
